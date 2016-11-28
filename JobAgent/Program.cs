@@ -14,7 +14,7 @@ namespace JobAgent
         {
             //string baseAddress = "http://" + System.Environment.MachineName + ":9999/";
             string baseAddress = "http://" + GetLocalIPAddress() + ":7777/";
-            CheckForPortAccess();
+            AllowPortAccess();
             AgentEnvironment.Agent_Name = GetHostName();
             Agent agent = AgentAPI.GetAgent(AgentEnvironment.Agent_Name);
             if(agent == null)
@@ -58,7 +58,7 @@ namespace JobAgent
             return Dns.GetHostName();
         }
 
-        public static void CheckForPortAccess()
+        public static void AllowPortAccess()
         {
             INetFwMgr icfMgr = null;
             try
@@ -94,7 +94,6 @@ namespace JobAgent
             }
             catch (Exception)
             {
-
             }
         }
     }

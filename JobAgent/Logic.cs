@@ -9,27 +9,24 @@ namespace JobAgent
 {
     public class Logic
     {
-        public static void StartJob(Job job)
+        public static void StartJob(Job thejob)
         {
             Console.WriteLine("Job Received. Starting soon...");
-
-
-
             Thread DoJob = new Thread(StartJobThread);
-            DoJob.Start(job);
+            DoJob.Start(thejob);
         }
 
-        public static void StartJobThread(object job)
+        public static void StartJobThread(object thejob)
         {
+            Job job = (Job)thejob;
             Thread.Sleep(9000);
 
             Console.WriteLine("Job Started");
 
             SetRunning();
-            Job dojob = (Job)job;
 
             Process process = new Process();
-            process.StartInfo.FileName = @"C:\Windows\System32\notepad.exe";
+            process.StartInfo.FileName = job.ExecutablePath;
             process.Start();
 
             Thread.Sleep(30000);
@@ -42,7 +39,7 @@ namespace JobAgent
             AgentEnvironment.HasTask = false;
 
             SetIdle();
-
+            JobAPI.SetJobFinished(job);
             Console.WriteLine("Job Finished");
         }
 

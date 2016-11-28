@@ -16,13 +16,13 @@ namespace JobAgent.Controllers
         }
 
         [Route("api/machine/give")]
-        [HttpPost]
-        public void Put()
+        [HttpPut]
+        public void Put(Job job)
         {
             if (!AgentEnvironment.HasTask)
             {
                 AgentEnvironment.HasTask = true;
-                Logic.StartJob(new Job());
+                Logic.StartJob(job);
             }
         }
     }
