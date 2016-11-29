@@ -89,29 +89,54 @@ namespace JobAgent
         {
             string origin = info.Split('?')[0];
             string target = info.Split('?')[1];
-            foreach(string file in Directory.GetFiles(origin))
+            try
             {
-                File.Copy(Path.Combine(file), Path.Combine(target, file.Remove(0, file.LastIndexOf('\\') + 1)), true);
+                foreach (string file in Directory.GetFiles(origin))
+                {
+                    File.Copy(Path.Combine(file), Path.Combine(target, file.Remove(0, file.LastIndexOf('\\') + 1)), true);
+                }
             }
+            catch(Exception)
+            { }
         }
 
         private static void RunExecutable(string info)
         {
-            Process process = new Process();
-            process.StartInfo.FileName = info.Split('?')[0];
-            process.StartInfo.Arguments = info.Split('?')[1];
-            process.Start();
+            try
+            {
+                Process process = new Process();
+                process.StartInfo.FileName = info.Split('?')[0];
 
-            Thread.Sleep(20000);
+                if(!File.Exists(info.Split('?')[0]))
+                {
+                    Console.WriteLine("Unable to locate executable");
+                    return;
+                }
 
-            process.Kill();
+                process.StartInfo.Arguments = info.Split('?')[1];
+                process.Start();
+
+                Thread.Sleep(20000);
+
+                if (!process.HasExited)
+                {
+                    process.Kill();
+                }
+            }
+            catch(Exception)
+            { }
         }
 
         private static void DeleteFiles(string info)
         {
             foreach(string file in Directory.GetFiles(Path.Combine(info)))
             {
-                File.Delete(file);
+                try
+                {
+                    File.Delete(file);
+                }
+                catch(Exception)
+                { }
             }
         }
 
