@@ -12,7 +12,6 @@ namespace JobAgent
     {
         static void Main(string[] args)
         {
-            //string baseAddress = "http://" + System.Environment.MachineName + ":9999/";
             string baseAddress = "http://" + GetLocalIPAddress() + ":7777/";
             AllowPortAccess();
             AgentEnvironment.Agent_Name = GetHostName();
@@ -22,11 +21,10 @@ namespace JobAgent
                 agent = new Agent(AgentEnvironment.Agent_Name, ip: GetLocalIPAddress() + ":7777");
                 AgentAPI.AddAgent(agent);
             }
-            AgentAPI.SetIdle(AgentEnvironment.Agent_Name);
-            //AgentCollection collection = AgentAPI.GetAllAgents();
-            //AgentAPI.GiveAgentJob(AgentEnvironment.agent_name);
+
             using (WebApp.Start<Startup>(url: baseAddress))
             {
+                AgentAPI.SetIdle(AgentEnvironment.Agent_Name);
                 Console.WriteLine("JobAgent started. Reachable at this IP: " + GetLocalIPAddress());
                 Console.ReadLine();
             }
