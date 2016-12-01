@@ -107,15 +107,28 @@ namespace JobAgent
             try
             {
                 Process process = new Process();
-                process.StartInfo.FileName = info.Split('?')[0];
 
-                if(!File.Exists(info.Split('?')[0]))
+                if (info.Contains("?"))
                 {
-                    Console.WriteLine("Unable to locate executable");
-                    return;
-                }
+                    process.StartInfo.FileName = info.Split('?')[0];
 
-                process.StartInfo.Arguments = info.Split('?')[1];
+                    if (!File.Exists(info.Split('?')[0]))
+                    {
+                        Console.WriteLine("Unable to locate executable");
+                        return;
+                    }
+                    process.StartInfo.Arguments = info.Split('?')[1];
+                }
+                else
+                {
+                    process.StartInfo.FileName = info;
+
+                    if (!File.Exists(info))
+                    {
+                        Console.WriteLine("Unable to locate executable");
+                        return;
+                    }
+                }
                 process.Start();
 
                 Thread.Sleep(20000);
