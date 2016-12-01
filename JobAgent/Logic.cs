@@ -24,6 +24,8 @@ namespace JobAgent
 
             SetRunning();
 
+            JobAPI.SetJobStarted(job);
+
             Console.WriteLine("Started Job " + job.JobName);
 
             if (job.PrerunGroup != 0)
