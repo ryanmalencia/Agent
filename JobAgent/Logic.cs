@@ -22,7 +22,7 @@ namespace JobAgent
             Job job = (Job)thejob;
             //Thread.Sleep(9000);
 
-            SetRunning();
+            SetRunning(job.pk_job);
 
             JobAPI.SetJobStarted(job);
 
@@ -155,9 +155,9 @@ namespace JobAgent
             }
         }
 
-        public static void SetRunning()
+        public static void SetRunning(int pk_job)
         {
-            AgentAPI.GiveAgentJob(AgentEnvironment.Agent_Name);
+            AgentAPI.GiveAgentJob(AgentEnvironment.Agent_Name, pk_job);
         }
 
         public static void SetIdle()
