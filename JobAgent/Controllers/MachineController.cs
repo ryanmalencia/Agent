@@ -1,7 +1,6 @@
 ﻿using System.Web.Http;
 using System;
 using System.Web.Http.Cors;
-using DataTypes;
 
 namespace JobAgent.Controllers
 {
@@ -22,8 +21,15 @@ namespace JobAgent.Controllers
             if (!AgentEnvironment.HasTask)
             {
                 AgentEnvironment.HasTask = true;
-                Logic.StartJob(pk);
+                JobLogic.StartJob(pk);
             }
+        }
+
+        [Route("api/machine/getstatus")]
+        [HttpGet]
+        public void GetStatus()
+        {
+
         }
     }
 }

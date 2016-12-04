@@ -7,7 +7,7 @@ using WebAPIClient.APICalls;
 
 namespace JobAgent
 {
-    public class Logic
+    public class JobLogic
     {
         public static void StartJob(int job_pk)
         {
@@ -20,35 +20,26 @@ namespace JobAgent
         public static void StartJobThread(object thejob)
         {
             Job job = (Job)thejob;
-            //Thread.Sleep(9000);
-
-            SetRunning(job.pk_job);
-
-            JobAPI.SetJobStarted(job);
-
+            AgentLogic.SetRunning(job.pk_job);
+            SetJobStarted(job);
             Console.WriteLine("Started Job " + job.JobName);
-
             if (job.PrerunGroup != 0)
             {
                 Console.WriteLine("Running PreJob Tasks");
                 RunJobTasks(job.PrerunGroup);
             }
-
             if (job.RunGroup != 0)
             {
                 Console.WriteLine("Running Job Tasks");
                 RunJobTasks(job.RunGroup);
             }
-
             if (job.PostRunGroup != 0)
             {
                 Console.WriteLine("Running PostJob Tasks");
                 RunJobTasks(job.PostRunGroup);
             }
-
             AgentEnvironment.HasTask = false;
-
-            SetIdle();
+            AgentLogic.SetIdle();
             JobAPI.SetJobFinished(job);
             Console.WriteLine("Job Finished");
         }
@@ -155,14 +146,13 @@ namespace JobAgent
             }
         }
 
-        public static void SetRunning(int pk_job)
+        /// <summary>
+        /// Set job to started status 
+        /// </summary>
+        /// <param name="job">Job to set</param>
+        public static void SetJobStarted(Job job)
         {
-            AgentAPI.GiveAgentJob(AgentEnvironment.Agent_Name, pk_job);
-        }
-
-        public static void SetIdle()
-        {
-            AgentAPI.SetIdle(AgentEnvironment.Agent_Name);
+            JobAPI.SetJobStarted(job);
         }
     }
 }
