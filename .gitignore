@@ -7,3 +7,4 @@
 */bin/Release/
 */obj/Release/
 packages
+*.lnk
