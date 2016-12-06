@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Owin.Hosting;
 using System.Net;
 using System.Net.Sockets;
 using WebAPIClient.APICalls;

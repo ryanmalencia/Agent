@@ -13,13 +13,19 @@ namespace JobAgent
         {
             Console.WriteLine("Job Received. Starting soon...");
             Thread DoJob = new Thread(StartJobThread);
-            Job thejob = JobAPI.GetByPk(job_pk);
-            DoJob.Start(thejob);
+            DoJob.Start(job_pk);
         }
 
-        public static void StartJobThread(object thejob)
+        public static void StartAdminJob(int job_pk)
         {
-            Job job = (Job)thejob;
+            Thread DoAdminJob = new Thread(StartAdminThread);
+            DoAdminJob.Start(job_pk);
+        }
+
+        private static void StartJobThread(object job_pk)
+        {
+            int pk = (int)job_pk;
+            Job job = JobAPI.GetByPk(pk);
             AgentLogic.SetRunning(job.pk_job);
             SetJobStarted(job);
             Console.WriteLine("Started Job " + job.JobName);
@@ -44,17 +50,24 @@ namespace JobAgent
             Console.WriteLine("Job Finished");
         }
 
+        private static void StartAdminThread(object job_pk)
+        {
+            int pk = (int)job_pk;
+            while (AgentEnvironment.HasTask) { }
+            Console.WriteLine("Administrative Job received...");
+            Job job = JobAPI.GetByPk(pk);
+        }
+
         public static void RunJobTasks(int group)
         {
             JobTaskCollection tasks = JobTaskAPI.GetByGroup(group);
-
             foreach(JobTask task in tasks.Tasks)
             {
                 DoTask(task);
             }
         }
 
-        public static void DoTask(JobTask task)
+        private static void DoTask(JobTask task)
         {
             switch (task.type)
             {
@@ -150,7 +163,7 @@ namespace JobAgent
         /// Set job to started status 
         /// </summary>
         /// <param name="job">Job to set</param>
-        public static void SetJobStarted(Job job)
+        private static void SetJobStarted(Job job)
         {
             JobAPI.SetJobStarted(job);
         }

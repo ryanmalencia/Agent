@@ -1,5 +1,5 @@
-﻿using System.Web.Http;
-using System;
+﻿using System;
+using System.Web.Http;
 using System.Web.Http.Cors;
 
 namespace JobAgent.Controllers
@@ -23,6 +23,13 @@ namespace JobAgent.Controllers
                 AgentEnvironment.HasTask = true;
                 JobLogic.StartJob(pk);
             }
+        }
+
+        [Route("api/machine/giveadmin/{pk}")]
+        [HttpPut]
+        public void PutAdmin(int pk)
+        {
+            JobLogic.StartAdminJob(pk);
         }
 
         [Route("api/machine/getstatus")]
