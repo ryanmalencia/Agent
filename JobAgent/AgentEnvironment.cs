@@ -10,5 +10,6 @@ namespace JobAgent
     {
         public static bool HasTask = false;
         public static string Agent_Name;
+        public static string IP;
     }
 }
