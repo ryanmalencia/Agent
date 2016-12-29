@@ -14,7 +14,10 @@ namespace JobAgent
             AllowPortAccess();
             AgentEnvironment.Agent_Name = GetHostName();
             AgentEnvironment.IP = GetLocalIPAddress() + ":7777";
-            Agent agent = null;// AgentAPI.GetAgent(AgentEnvironment.Agent_Name);
+            Agent agent = new Agent();// AgentAPI.GetAgent(AgentEnvironment.Agent_Name);
+            agent.IP = AgentEnvironment.IP;
+            agent.Name = AgentEnvironment.Agent_Name;
+            AgentAPI.Update(agent);
             if (agent == null)
             {
                 agent = new Agent(AgentEnvironment.Agent_Name, ip: AgentEnvironment.IP);
@@ -22,8 +25,7 @@ namespace JobAgent
             }
             if (AgentEnvironment.IP != agent.IP)
             {
-                agent.IP = AgentEnvironment.IP;
-                AgentAPI.UpdateIP(agent);
+
             }
         }
 
