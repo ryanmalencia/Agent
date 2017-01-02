@@ -26,7 +26,7 @@ namespace JobAgent
         {
             int pk = (int)job_pk;
             Job job = JobAPI.GetByPk(pk);
-            AgentLogic.SetRunning(job.pk_job);
+            AgentLogic.SetRunning(job.JobID);
             SetJobStarted(job);
             Console.WriteLine("Started Job " + job.JobName);
             if (job.PrerunGroup != 0)
@@ -69,21 +69,21 @@ namespace JobAgent
 
         private static void DoTask(JobTask task)
         {
-            switch (task.type)
+            switch (task.Type)
             {
                 case "copyfiles":
                     {
-                        CopyFiles(task.info);
+                        CopyFiles(task.Info);
                         break;
                     }
                 case "runprogram":
                     {
-                        RunExecutable(task.info);
+                        RunExecutable(task.Info);
                         break;
                     }
                 case "deletefiles":
                     {
-                        DeleteFiles(task.info);
+                        DeleteFiles(task.Info);
                         break;
                     }
                 default:
