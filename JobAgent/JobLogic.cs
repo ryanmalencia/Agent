@@ -25,7 +25,7 @@ namespace JobAgent
         private static void StartJobThread(object job_pk)
         {
             int pk = (int)job_pk;
-            Job job = JobAPI.GetByPk(pk);
+            Job job = JobAPI.GetById(pk);
             AgentLogic.SetRunning(job.JobID);
             SetJobStarted(job);
             Console.WriteLine("Started Job " + job.JobName);
@@ -55,7 +55,7 @@ namespace JobAgent
             int pk = (int)job_pk;
             while (AgentEnvironment.HasTask) { }
             Console.WriteLine("Administrative Job received...");
-            Job job = JobAPI.GetByPk(pk);
+            Job job = JobAPI.GetById(pk);
         }
 
         public static void RunJobTasks(int group)
