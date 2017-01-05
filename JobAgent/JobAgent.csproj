@@ -119,11 +119,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ConsoleWebAPI\DataTypes\DataTypes.csproj">
+    <ProjectReference Include="..\..\EntityWeb\DataTypes\DataTypes.csproj">
       <Project>{50440a0d-dadf-4356-95e3-b3b6c766c181}</Project>
       <Name>DataTypes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ConsoleWebAPI\WebAPIClient\WebAPIClient.csproj">
+    <ProjectReference Include="..\..\EntityWeb\WebAPIClient\WebAPIClient.csproj">
       <Project>{e655c96a-262e-41c8-9bb3-c6d1838da97a}</Project>
       <Name>WebAPIClient</Name>
     </ProjectReference>
