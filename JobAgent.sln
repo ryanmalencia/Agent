@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobAgent", "JobAgent\JobAgent.csproj", "{F4AFC34E-4869-43F7-BD26-344E02A0890B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTypes", "..\EntityWeb\DataTypes\DataTypes.csproj", "{50440A0D-DADF-4356-95E3-B3B6C766C181}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataTypes", "..\PittNowServer\DataTypes\DataTypes.csproj", "{50440A0D-DADF-4356-95E3-B3B6C766C181}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPIClient", "..\EntityWeb\WebAPIClient\WebAPIClient.csproj", "{E655C96A-262E-41C8-9BB3-C6D1838DA97A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPIClient", "..\PittNowServer\WebAPIClient\WebAPIClient.csproj", "{E655C96A-262E-41C8-9BB3-C6D1838DA97A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
