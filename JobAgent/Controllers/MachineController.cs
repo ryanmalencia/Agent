@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using Newtonsoft.Json;
 using System.Web.Http.Cors;
 
 namespace JobAgent.Controllers
@@ -34,9 +35,9 @@ namespace JobAgent.Controllers
 
         [Route("api/machine/getstatus")]
         [HttpGet]
-        public void GetStatus()
+        public IHttpActionResult GetStatus()
         {
-
+            return Ok(JsonConvert.SerializeObject(AgentEnvironment.HasTask));
         }
     }
 }
