@@ -39,5 +39,12 @@ namespace JobAgent.Controllers
         {
             return Ok(JsonConvert.SerializeObject(AgentEnvironment.HasTask));
         }
+
+        [Route("api/machine/kill")]
+        [HttpGet]
+        public void Kill()
+        {
+            AgentLogic.Kill();
+        }
     }
 }

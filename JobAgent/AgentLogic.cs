@@ -1,4 +1,5 @@
-﻿using WebAPIClient.APICalls;
+﻿using System;
+using WebAPIClient.APICalls;
 
 namespace JobAgent
 {
@@ -19,6 +20,16 @@ namespace JobAgent
         public static void SetIdle()
         {
             AgentAPI.SetIdle(AgentEnvironment.Agent_Name);
+        }
+
+        /// <summary>
+        /// Terminate the program
+        /// </summary>
+        public static void Kill()
+        {
+            Console.WriteLine("Killing machine");
+            AgentAPI.SetDead(AgentEnvironment.Agent_Name);
+            Environment.Exit(1);
         }
     }
 }
