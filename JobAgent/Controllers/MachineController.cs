@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Web.Http;
 using Newtonsoft.Json;
+using WebAPIClient.APICalls;
+using DataTypes;
 using System.Web.Http.Cors;
 
 namespace JobAgent.Controllers
@@ -21,8 +23,9 @@ namespace JobAgent.Controllers
         {
             if (!AgentEnvironment.HasTask)
             {
-                AgentEnvironment.HasTask = true;
-                JobLogic.StartJob(pk);
+                Job job = JobAPI.GetById(pk);
+                AgentEnvironment.SetJob(job);
+                JobLogic.StartJob(job);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Owin.Hosting;
+using JobAgent.SignalR;
 
 namespace JobAgent
 {
@@ -13,6 +14,7 @@ namespace JobAgent
             {
                 AgentLogic.SetIdle();
                 Console.WriteLine("JobAgent started. Reachable at this IP: " + StartupLogic.GetLocalIPAddress());
+
                 Console.ReadLine();
             }
         }

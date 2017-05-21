@@ -3,17 +3,21 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using JobAgent.SignalR;
 using WebAPIClient.APICalls;
 
 namespace JobAgent
 {
     public class JobLogic
     {
-        public static void StartJob(int job_pk)
+        public static Job job;
+        public static void StartJob(Job Job)
         {
+            AgentStatus.Instance.UpdateDesktop(Job.JobName);
+            job = Job;
             Console.WriteLine("Job Received. Starting soon...");
             Thread DoJob = new Thread(StartJobThread);
-            DoJob.Start(job_pk);
+            DoJob.Start(job.JobID);
         }
 
         public static void StartAdminJob(int job_pk)
@@ -25,8 +29,7 @@ namespace JobAgent
         private static void StartJobThread(object job_pk)
         {
             int pk = (int)job_pk;
-            Job job = JobAPI.GetById(pk);
-            AgentLogic.SetRunning(job.JobID);
+            AgentLogic.SetRunning(job);
             SetJobStarted(job);
             Console.WriteLine("Started Job " + job.JobName);
             if (job.PrerunGroup != 0)
@@ -44,7 +47,7 @@ namespace JobAgent
                 Console.WriteLine("Running PostJob Tasks");
                 RunJobTasks(job.PostRunGroup);
             }
-            AgentEnvironment.HasTask = false;
+
             AgentLogic.SetIdle();
             JobAPI.SetJobFinished(job);
             Console.WriteLine("Job Finished");

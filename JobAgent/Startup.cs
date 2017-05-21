@@ -1,5 +1,9 @@
 ﻿using Owin;
+using Microsoft.Owin;
 using System.Web.Http;
+using Microsoft.AspNet.SignalR;
+
+[assembly: OwinStartup(typeof(JobAgent.Startup))]
 
 namespace JobAgent
 {
@@ -12,6 +16,9 @@ namespace JobAgent
             config.MapHttpAttributeRoutes();
             config.EnableCors();
             appBuilder.UseWebApi(config);
+            var Config = new HubConfiguration();
+            Config.EnableJSONP = true;
+            appBuilder.MapSignalR(Config);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using DataTypes;
 using WebAPIClient.APICalls;
 
 namespace JobAgent
@@ -9,9 +10,10 @@ namespace JobAgent
         /// Set machine to running status
         /// </summary>
         /// <param name="pk_job">Job pk</param>
-        public static void SetRunning(int pk_job)
+        public static void SetRunning(Job job)
         {
-            AgentAPI.GiveAgentJob(AgentEnvironment.Agent_Name, pk_job);
+            AgentEnvironment.SetJob(job);
+            AgentAPI.GiveAgentJob(AgentEnvironment.Agent_Name, job.JobID);
         }
 
         /// <summary>
@@ -19,6 +21,7 @@ namespace JobAgent
         /// </summary>
         public static void SetIdle()
         {
+            AgentEnvironment.SetIdle();
             AgentAPI.SetIdle(AgentEnvironment.Agent_Name);
         }
 

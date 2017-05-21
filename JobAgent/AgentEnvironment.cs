@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DataTypes;
 
 namespace JobAgent
 {
@@ -11,5 +7,18 @@ namespace JobAgent
         public static bool HasTask = false;
         public static string Agent_Name;
         public static string IP;
+        public static string Job_Name = "";
+
+        public static void SetJob(Job job)
+        {
+            HasTask = true;
+            Job_Name = job.JobName;
+        }
+
+        public static void SetIdle()
+        {
+            HasTask = false;
+            Job_Name = "";
+        }
     }
 }
