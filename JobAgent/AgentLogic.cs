@@ -1,6 +1,7 @@
 ﻿using System;
 using DataTypes;
 using WebAPIClient.APICalls;
+using JobAgent.SignalR;
 
 namespace JobAgent
 {
@@ -33,6 +34,12 @@ namespace JobAgent
             Console.WriteLine("Killing machine");
             AgentAPI.SetDead(AgentEnvironment.Agent_Name);
             Environment.Exit(1);
+        }
+
+        public static void UpdateHardware()
+        {
+            AgentEnvironment.GetHardware();
+            AgentStatus.Instance.UpdateHardware("");
         }
     }
 }

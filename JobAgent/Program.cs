@@ -9,6 +9,7 @@ namespace JobAgent
         static void Main(string[] args)
         {
             string baseAddress = "http://" + StartupLogic.GetLocalIPAddress() + ":7777/";
+            AgentEnvironment.GetHardware();
             StartupLogic.InitializeAgent();
             using (WebApp.Start<Startup>(url: baseAddress))
             {

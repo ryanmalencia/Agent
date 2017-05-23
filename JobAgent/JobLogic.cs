@@ -13,7 +13,7 @@ namespace JobAgent
         public static Job job;
         public static void StartJob(Job Job)
         {
-            AgentStatus.Instance.UpdateDesktop(Job.JobName);
+            AgentStatus.Instance.UpdateJob(Job.JobName);
             job = Job;
             Console.WriteLine("Job Received. Starting soon...");
             Thread DoJob = new Thread(StartJobThread);

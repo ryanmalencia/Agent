@@ -28,9 +28,14 @@ namespace JobAgent.SignalR
             }
         }
 
-        public void UpdateDesktop(string message)
+        public void UpdateJob(string message)
         {
-            Clients.All.updateDesktop(message);
+            Clients.All.updateJob(message);
+        }
+
+        public void UpdateHardware(string hardware)
+        {
+            Clients.All.updateHardware(hardware);
         }
     }
 }
