@@ -14,35 +14,50 @@ namespace JobAgent
         public static string IP;
         public static string Job_Name = "";
 
+        /// <summary>
+        /// Set state to running job
+        /// </summary>
+        /// <param name="job"></param>
         public static void SetJob(Job job)
         {
             HasTask = true;
             Job_Name = job.JobName;
         }
 
+        /// <summary>
+        /// Set state to idle
+        /// </summary>
         public static void SetIdle()
         {
             HasTask = false;
             Job_Name = "";
         }
 
+        /// <summary>
+        /// Get a string that is representative of this machine's hardware
+        /// </summary>
+        /// <returns>Hardware string</returns>
         public static string GetHardware()
         {
             string Hardware = "";
-            List<string> specs = new List<string>() { "Win32_LogicalDisk", "Win32_DiskDrive", "Win32_PhysicalMemory", "Win32_MemoryDevice" };
-
-            foreach(string str in specs)
-            {
-                ManagementClass mc = new ManagementClass(str);
-                ManagementObjectCollection col = mc.GetInstances();
-
-                foreach(ManagementObject obj in col)
-                {
-                    Hardware += "Free space on " + obj["Name"] + " drive: " + obj["FreeSpace"] + ";";
-                }
-            }
-
+            Hardware += GetDiskSpace();
             return Hardware;
+        }
+
+        /// <summary>
+        /// Get a string containing the free space on each drive
+        /// </summary>
+        /// <returns>String containing free space on each drive</returns>
+        private static string GetDiskSpace()
+        {
+            string space = string.Empty;
+            ManagementClass mc = new ManagementClass("Win32_LogicalDisk");
+            ManagementObjectCollection col = mc.GetInstances();
+            foreach (ManagementObject obj in col)
+            {
+                space += "Free space on " + obj["Name"] + " drive: " + (int)(Double.Parse(obj["FreeSpace"].ToString()) / 1024 / 1024 / 1024) + " GB;";
+            }
+            return space;
         }
     }
 }

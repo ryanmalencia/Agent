@@ -5,6 +5,9 @@ using JobAgent.SignalR;
 
 namespace JobAgent
 {
+    /// <summary>
+    /// Logic actions for Agent
+    /// </summary>
     public class AgentLogic
     {
         /// <summary>
@@ -36,6 +39,9 @@ namespace JobAgent
             Environment.Exit(1);
         }
 
+        /// <summary>
+        /// Send a string with updated hardware information
+        /// </summary>
         public static void UpdateHardware()
         {
             AgentEnvironment.GetHardware();
