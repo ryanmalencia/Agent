@@ -1,8 +1,5 @@
 ﻿using DataTypes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Management;
 
 namespace JobAgent
@@ -17,7 +14,7 @@ namespace JobAgent
         /// <summary>
         /// Set state to running job
         /// </summary>
-        /// <param name="job"></param>
+        /// <param name="job">Job to give to agent</param>
         public static void SetJob(Job job)
         {
             HasTask = true;
@@ -81,10 +78,13 @@ namespace JobAgent
             return usage;
         }
 
+        /// <summary>
+        /// Get a string containing CPU usage
+        /// </summary>
+        /// <returns>String containing CPU usage</returns>
         private static string GetCPUUsage()
         {
             string usage = string.Empty;
-
             ManagementClass mc = new ManagementClass("Win32_Processor");
             ManagementObjectCollection col = mc.GetInstances();
             foreach (ManagementObject obj in col)
