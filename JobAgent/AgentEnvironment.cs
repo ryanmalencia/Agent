@@ -41,6 +41,8 @@ namespace JobAgent
         {
             string Hardware = "";
             Hardware += GetDiskSpace();
+            Hardware += GetRamUsage();
+            Hardware += GetCPUUsage();
             return Hardware;
         }
 
@@ -55,9 +57,45 @@ namespace JobAgent
             ManagementObjectCollection col = mc.GetInstances();
             foreach (ManagementObject obj in col)
             {
-                space += "Free space on " + obj["Name"] + " drive: " + (int)(Double.Parse(obj["FreeSpace"].ToString()) / 1024 / 1024 / 1024) + " GB;";
+                space += "!Free space on " + obj["Name"] + " drive: " + (int)(Double.Parse(obj["FreeSpace"].ToString()) / 1024 / 1024 / 1024) + " GB!";
             }
             return space;
+        }
+
+        /// <summary>
+        /// Get a string containing ram usage
+        /// </summary>
+        /// <returns>String containing ram usage</returns>
+        private static string GetRamUsage()
+        {
+            string usage = string.Empty;
+            ManagementClass mc = new ManagementClass("Win32_OperatingSystem");
+            ManagementObjectCollection col = mc.GetInstances();
+            foreach (ManagementObject obj in col)
+            {
+                int total = Int32.Parse(obj["TotalVisibleMemorySize"].ToString()) / 1024;
+                int free = total - Int32.Parse(obj["FreePhysicalMemory"].ToString()) / 1024;
+                int percent = (free * 100) / total;
+                usage += "$Ram Usage: " + free + "/" + total + " MB (" + percent + "%)$";
+            }
+            return usage;
+        }
+
+        private static string GetCPUUsage()
+        {
+            string usage = string.Empty;
+
+            ManagementClass mc = new ManagementClass("Win32_Processor");
+            ManagementObjectCollection col = mc.GetInstances();
+            foreach (ManagementObject obj in col)
+            {
+                if (obj["LoadPercentage"] != null)
+                {
+                    int percent = Int32.Parse(obj["LoadPercentage"].ToString());
+                    usage += "&CPU Usage: " + percent + "%&";
+                }
+            }
+            return usage;
         }
     }
 }

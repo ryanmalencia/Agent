@@ -44,8 +44,7 @@ namespace JobAgent
         /// </summary>
         public static void UpdateHardware()
         {
-            AgentEnvironment.GetHardware();
-            AgentStatus.Instance.UpdateHardware("");
+            AgentStatus.Instance.UpdateHardware(AgentEnvironment.GetHardware());
         }
     }
 }
