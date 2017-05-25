@@ -54,7 +54,13 @@ namespace JobAgent
             ManagementObjectCollection col = mc.GetInstances();
             foreach (ManagementObject obj in col)
             {
-                space += "!Free space on " + obj["Name"] + " drive: " + (int)(Double.Parse(obj["FreeSpace"].ToString()) / 1024 / 1024 / 1024) + " GB!";
+                if(obj["Name"].ToString().Contains("C"))
+                {
+                    int total = (int)(Double.Parse(obj["Size"].ToString()) / 1024 / 1024 / 1024);
+                    int available = total - (int)(Double.Parse(obj["FreeSpace"].ToString()) / 1024 / 1024 / 1024);
+                    int percent = (available * 100)/ total;
+                    space += "!Drive Usage: " + available + "/" + total + " GB (" + percent + "%)!";
+                }
             }
             return space;
         }
