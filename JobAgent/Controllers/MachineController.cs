@@ -1,9 +1,9 @@
-﻿using System;
-using System.Web.Http;
+﻿using DataTypes;
 using Newtonsoft.Json;
-using WebAPIClient.APICalls;
-using DataTypes;
+using System;
+using System.Web.Http;
 using System.Web.Http.Cors;
+using WebAPIClient.APICalls;
 
 namespace JobAgent.Controllers
 {
@@ -33,7 +33,9 @@ namespace JobAgent.Controllers
         [HttpPut]
         public void PutAdmin(int pk)
         {
-            JobLogic.StartAdminJob(pk);
+            Job job = JobAPI.GetById(pk);
+            AgentEnvironment.SetJob(job);
+            JobLogic.StartAdminJob(job);
         }
 
         [Route("api/machine/getstatus")]

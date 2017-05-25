@@ -1,9 +1,10 @@
-﻿using System;
+﻿using DataTypes;
+using NetFwTypeLib;
+using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using WebAPIClient.APICalls;
-using DataTypes;
-using NetFwTypeLib;
 
 namespace JobAgent
 {
@@ -12,6 +13,8 @@ namespace JobAgent
         public static void InitializeAgent()
         {
             AllowPortAccess();
+            Thread HardwareMonitor = new Thread(StartHardwareThread);
+            HardwareMonitor.Start();
             AgentEnvironment.Agent_Name = GetHostName();
             AgentEnvironment.IP = GetLocalIPAddress() + ":7777";
             Agent agent = AgentAPI.GetAgent(AgentEnvironment.Agent_Name);
@@ -84,6 +87,18 @@ namespace JobAgent
         public static string GetHostName()
         {
             return Dns.GetHostName();
+        }
+
+        /// <summary>
+        /// Hardware thread
+        /// </summary>
+        private static void StartHardwareThread()
+        {
+            while (true)
+            {
+                AgentLogic.UpdateHardware();
+                Thread.Sleep(1500);
+            }
         }
     }
 }

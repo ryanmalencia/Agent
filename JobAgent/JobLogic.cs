@@ -1,9 +1,9 @@
 ﻿using DataTypes;
+using JobAgent.SignalR;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using JobAgent.SignalR;
 using WebAPIClient.APICalls;
 
 namespace JobAgent
@@ -11,6 +11,11 @@ namespace JobAgent
     public class JobLogic
     {
         public static Job job;
+
+        /// <summary>
+        /// Start running a job
+        /// </summary>
+        /// <param name="Job">Job to run</param>
         public static void StartJob(Job Job)
         {
             AgentStatus.Instance.UpdateJob(Job.JobName);
@@ -20,10 +25,17 @@ namespace JobAgent
             DoJob.Start(job.JobID);
         }
 
-        public static void StartAdminJob(int job_pk)
+        /// <summary>
+        /// Start running an admin job
+        /// </summary>
+        /// <param name="Job">Job to run</param>
+        public static void StartAdminJob(Job Job)
         {
             Thread DoAdminJob = new Thread(StartAdminThread);
-            DoAdminJob.Start(job_pk);
+            job = Job;
+            Console.WriteLine("Admin Job Received. Starting soon...");
+            Thread DoJob = new Thread(StartJobThread);
+            DoJob.Start(job.JobID);
         }
 
         private static void StartJobThread(object job_pk)
@@ -47,7 +59,6 @@ namespace JobAgent
                 Console.WriteLine("Running PostJob Tasks");
                 RunJobTasks(job.PostRunGroup);
             }
-
             AgentLogic.SetIdle();
             JobAPI.SetJobFinished(job);
             Console.WriteLine("Job Finished");
@@ -61,7 +72,7 @@ namespace JobAgent
             Job job = JobAPI.GetById(pk);
         }
 
-        public static void RunJobTasks(int group)
+        private static void RunJobTasks(int group)
         {
             JobTaskCollection tasks = JobTaskAPI.GetByGroup(group);
             foreach(JobTask task in tasks.Tasks)
@@ -81,7 +92,7 @@ namespace JobAgent
                     }
                 case "runprogram":
                     {
-                        RunExecutable(task.Info);
+                        RunExecutable(task.Info,task.AddInfo);
                         break;
                     }
                 case "deletefiles":
@@ -109,16 +120,19 @@ namespace JobAgent
             { }
         }
 
-        private static void RunExecutable(string info)
+        /// <summary>
+        /// Run the given executable
+        /// </summary>
+        /// <param name="info">Location</param>
+        /// <param name="addinfo">Arguments</param>
+        private static void RunExecutable(string info, string addinfo)
         {
             try
             {
                 Process process = new Process();
-
                 if (info.Contains("?"))
                 {
                     process.StartInfo.FileName = info.Split('?')[0];
-
                     if (!File.Exists(info.Split('?')[0]))
                     {
                         Console.WriteLine("Unable to locate executable");
@@ -129,17 +143,15 @@ namespace JobAgent
                 else
                 {
                     process.StartInfo.FileName = info;
-
                     if (!File.Exists(info))
                     {
                         Console.WriteLine("Unable to locate executable");
                         return;
                     }
+                    process.StartInfo.Arguments = addinfo;
                 }
                 process.Start();
-
                 Thread.Sleep(20000);
-
                 if (!process.HasExited)
                 {
                     process.Kill();
