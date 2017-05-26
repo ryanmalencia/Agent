@@ -150,6 +150,8 @@ namespace JobAgent
                     }
                     process.StartInfo.Arguments = addinfo;
                 }
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.WorkingDirectory = Path.GetDirectoryName(info).ToString();
                 process.Start();
                 Thread.Sleep(20000);
                 if (!process.HasExited)
