@@ -20,7 +20,7 @@ namespace JobAgent
         {
             AgentStatus.Instance.UpdateJob(Job.JobName);
             job = Job;
-            Console.WriteLine("Job Received. Starting soon...");
+            LogLogic.InfoLog("Job Received. Starting soon...");
             Thread DoJob = new Thread(StartJobThread);
             DoJob.Start(job.JobID);
         }
@@ -33,7 +33,7 @@ namespace JobAgent
         {
             Thread DoAdminJob = new Thread(StartAdminThread);
             job = Job;
-            Console.WriteLine("Admin Job Received. Starting soon...");
+            LogLogic.InfoLog("Admin Job Received. Starting soon...");
             Thread DoJob = new Thread(StartJobThread);
             DoJob.Start(job.JobID);
         }
@@ -43,32 +43,32 @@ namespace JobAgent
             int pk = (int)job_pk;
             AgentLogic.SetRunning(job);
             SetJobStarted(job);
-            Console.WriteLine("Started Job " + job.JobName);
+            LogLogic.InfoLog("Started Job " + job.JobName);
             if (job.PrerunGroup != 0)
             {
-                Console.WriteLine("Running PreJob Tasks");
+                LogLogic.InfoLog("Running PreJob Tasks");
                 RunJobTasks(job.PrerunGroup);
             }
             if (job.RunGroup != 0)
             {
-                Console.WriteLine("Running Job Tasks");
+                LogLogic.InfoLog("Running Job Tasks");
                 RunJobTasks(job.RunGroup);
             }
             if (job.PostRunGroup != 0)
             {
-                Console.WriteLine("Running PostJob Tasks");
+                LogLogic.InfoLog("Running PostJob Tasks");
                 RunJobTasks(job.PostRunGroup);
             }
             AgentLogic.SetIdle();
             JobAPI.SetJobFinished(job);
-            Console.WriteLine("Job Finished");
+            LogLogic.InfoLog("Job Finished");
         }
 
         private static void StartAdminThread(object job_pk)
         {
             int pk = (int)job_pk;
             while (AgentEnvironment.HasTask) { }
-            Console.WriteLine("Administrative Job received...");
+            LogLogic.InfoLog("Administrative Job received...");
             Job job = JobAPI.GetById(pk);
         }
 
@@ -135,7 +135,7 @@ namespace JobAgent
                     process.StartInfo.FileName = info.Split('?')[0];
                     if (!File.Exists(info.Split('?')[0]))
                     {
-                        Console.WriteLine("Unable to locate executable");
+                        LogLogic.WarnLog("Unable to locate executable");
                         return;
                     }
                     process.StartInfo.Arguments = info.Split('?')[1];
@@ -145,7 +145,7 @@ namespace JobAgent
                     process.StartInfo.FileName = info;
                     if (!File.Exists(info))
                     {
-                        Console.WriteLine("Unable to locate executable");
+                        LogLogic.WarnLog("Unable to locate executable");
                         return;
                     }
                     process.StartInfo.Arguments = addinfo;
