@@ -6,6 +6,7 @@
 */obj/Debug/
 */bin/Release/
 */obj/Release/
+.vs/JobAgent
 packages
 *.lnk
 db.lock

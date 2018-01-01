@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using DataTypes;
 using WebAPIClient.APICalls;
 using JobAgent.SignalR;
@@ -37,6 +38,15 @@ namespace JobAgent
             Console.WriteLine("Killing machine");
             AgentAPI.SetDead(AgentEnvironment.Agent_Name);
             Environment.Exit(1);
+        }
+
+        /// <summary>
+        /// Shutdown the machine
+        /// </summary>
+        public static void Shutdown()
+        {
+            AgentAPI.SetDead(AgentEnvironment.Agent_Name);
+            Process.Start("shutdown", "/s /t 0");
         }
 
         /// <summary>
