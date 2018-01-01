@@ -46,10 +46,17 @@ namespace JobAgent.Controllers
         }
 
         [Route("api/machine/kill")]
-        [HttpGet]
+        [HttpPost]
         public void Kill()
         {
             AgentLogic.Kill();
+        }
+
+        [Route("api/machine/shutdown")]
+        [HttpPost]
+        public void Shutdown()
+        {
+            AgentLogic.Shutdown();
         }
     }
 }
