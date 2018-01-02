@@ -34,13 +34,9 @@ namespace JobAgent
         /// Get a string that is representative of this machine's hardware
         /// </summary>
         /// <returns>Hardware string</returns>
-        public static string GetHardware()
+        public static Hardware GetHardware()
         {
-            string Hardware = "";
-            Hardware += GetDiskSpace();
-            Hardware += GetRamUsage();
-            Hardware += GetCPUUsage();
-            return Hardware;
+            return new Hardware(Agent_Name, GetDiskSpace(), GetCPUUsage(), GetRamUsage());
         }
 
         /// <summary>
@@ -59,7 +55,7 @@ namespace JobAgent
                     int total = (int)(Double.Parse(obj["Size"].ToString()) / 1024 / 1024 / 1024);
                     int available = total - (int)(Double.Parse(obj["FreeSpace"].ToString()) / 1024 / 1024 / 1024);
                     int percent = (available * 100)/ total;
-                    space += "!Drive Usage: " + available + "/" + total + " GB (" + percent + "%)!";
+                    space += "Drive Usage: " + available + "/" + total + " GB (" + percent + "%)";
                 }
             }
             return space;
@@ -79,7 +75,7 @@ namespace JobAgent
                 int total = Int32.Parse(obj["TotalVisibleMemorySize"].ToString()) / 1024;
                 int free = total - Int32.Parse(obj["FreePhysicalMemory"].ToString()) / 1024;
                 int percent = (free * 100) / total;
-                usage += "$Ram Usage: " + free + "/" + total + " MB (" + percent + "%)$";
+                usage += "Ram Usage: " + free + "/" + total + " MB (" + percent + "%)";
             }
             return usage;
         }
@@ -98,7 +94,7 @@ namespace JobAgent
                 if (obj["LoadPercentage"] != null)
                 {
                     int percent = Int32.Parse(obj["LoadPercentage"].ToString());
-                    usage += "&CPU Usage: " + percent + "%&";
+                    usage += "CPU Usage: " + percent + "%";
                 }
             }
             return usage;

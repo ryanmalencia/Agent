@@ -56,7 +56,12 @@ namespace JobAgent
         /// </summary>
         public static void UpdateHardware()
         {
-            AgentStatus.Instance.UpdateHardware(AgentEnvironment.GetHardware());
+            AgentAPI.UpdateHardware(AgentEnvironment.GetHardware());
+        }
+
+        public static void UpdateJob()
+        {
+            AgentAPI.UpdateJob(AgentEnvironment.Job_Name);
         }
     }
 }

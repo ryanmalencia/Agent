@@ -1,5 +1,4 @@
 ﻿using DataTypes;
-using JobAgent.SignalR;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -18,7 +17,7 @@ namespace JobAgent
         /// <param name="Job">Job to run</param>
         public static void StartJob(Job Job)
         {
-            AgentStatus.Instance.UpdateJob(Job.JobName);
+            AgentAPI.UpdateJob(Job.JobName);
             job = Job;
             LogLogic.InfoLog("Job Received. Starting soon...");
             Thread DoJob = new Thread(StartJobThread);
