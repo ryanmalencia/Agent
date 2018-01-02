@@ -35,7 +35,8 @@ namespace JobAgent
         /// </summary>
         public static void Kill()
         {
-            Console.WriteLine("Killing machine");
+            //Console.WriteLine("Killing machine");
+            LogLogic.InfoLog("Stopping agent");
             AgentAPI.SetDead(AgentEnvironment.Agent_Name);
             Environment.Exit(1);
         }
@@ -45,6 +46,7 @@ namespace JobAgent
         /// </summary>
         public static void Shutdown()
         {
+            LogLogic.InfoLog("Shutting agent down");
             AgentAPI.SetDead(AgentEnvironment.Agent_Name);
             Process.Start("shutdown", "/s /t 0");
         }
