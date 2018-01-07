@@ -17,7 +17,7 @@ namespace JobAgent
         /// <param name="Job">Job to run</param>
         public static void StartJob(Job Job)
         {
-            AgentAPI.UpdateJob(Job.JobName);
+            //AgentAPI.UpdateJob(Job.JobName);
             job = Job;
             LogLogic.InfoLog("Job Received. Starting soon...");
             Thread DoJob = new Thread(StartJobThread);
@@ -46,17 +46,17 @@ namespace JobAgent
             if (job.PrerunGroup != 0)
             {
                 LogLogic.InfoLog("Running PreJob Tasks");
-                RunJobTasks(job.PrerunGroup);
+                RunJobTasks(job.JobName, job.PrerunGroup);
             }
             if (job.RunGroup != 0)
             {
                 LogLogic.InfoLog("Running Job Tasks");
-                RunJobTasks(job.RunGroup);
+                RunJobTasks(job.JobName, job.RunGroup);
             }
             if (job.PostRunGroup != 0)
             {
                 LogLogic.InfoLog("Running PostJob Tasks");
-                RunJobTasks(job.PostRunGroup);
+                RunJobTasks(job.JobName, job.PostRunGroup);
             }
             AgentLogic.SetIdle();
             JobAPI.SetJobFinished(job);
@@ -71,16 +71,16 @@ namespace JobAgent
             Job job = JobAPI.GetById(pk);
         }
 
-        private static void RunJobTasks(int group)
+        private static void RunJobTasks(string name, int group)
         {
             JobTaskCollection tasks = JobTaskAPI.GetByGroup(group);
             foreach(JobTask task in tasks.Tasks)
             {
-                DoTask(task);
+                DoTask(name, task);
             }
         }
 
-        private static void DoTask(JobTask task)
+        private static void DoTask(string name, JobTask task)
         {
             switch (task.Type)
             {
@@ -91,7 +91,7 @@ namespace JobAgent
                     }
                 case "runprogram":
                     {
-                        RunExecutable(task.Info,task.AddInfo);
+                        RunExecutable(name, task.Info,task.AddInfo);
                         break;
                     }
                 case "deletefiles":
@@ -124,11 +124,12 @@ namespace JobAgent
         /// </summary>
         /// <param name="info">Location</param>
         /// <param name="addinfo">Arguments</param>
-        private static void RunExecutable(string info, string addinfo)
+        private static void RunExecutable(string name, string info, string addinfo)
         {
             try
             {
                 Process process = new Process();
+                string path = Path.Combine("App_Data",name, info);
                 if (info.Contains("?"))
                 {
                     process.StartInfo.FileName = info.Split('?')[0];
@@ -141,8 +142,8 @@ namespace JobAgent
                 }
                 else
                 {
-                    process.StartInfo.FileName = info;
-                    if (!File.Exists(info))
+                    process.StartInfo.FileName = path;
+                    if (!File.Exists(path))
                     {
                         LogLogic.WarnLog("Unable to locate executable");
                         return;
@@ -150,13 +151,14 @@ namespace JobAgent
                     process.StartInfo.Arguments = addinfo;
                 }
                 process.StartInfo.UseShellExecute = false;
-                process.StartInfo.WorkingDirectory = Path.GetDirectoryName(info).ToString();
+                process.StartInfo.WorkingDirectory = Path.GetDirectoryName(path).ToString();
                 process.Start();
-                Thread.Sleep(20000);
+                /*Thread.Sleep(20000);
                 if (!process.HasExited)
                 {
                     process.Kill();
-                }
+                }*/
+                process.WaitForExit();
             }
             catch(Exception)
             { }
