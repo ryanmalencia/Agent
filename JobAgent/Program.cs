@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin.Hosting;
+﻿using JobAgent.Logic;
+using Microsoft.Owin.Hosting;
 using System;
 
 namespace JobAgent

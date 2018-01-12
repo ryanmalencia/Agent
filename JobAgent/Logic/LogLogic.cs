@@ -2,7 +2,7 @@
 using DataTypes;
 using WebAPIClient.APICalls;
 
-namespace JobAgent
+namespace JobAgent.Logic
 {
     public class LogLogic
     {

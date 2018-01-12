@@ -1,4 +1,5 @@
 ﻿using DataTypes;
+using JobAgent.Logic;
 using Newtonsoft.Json;
 using System;
 using System.Web.Http;

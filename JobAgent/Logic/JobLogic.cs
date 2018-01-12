@@ -2,26 +2,28 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Threading;
 using WebAPIClient.APICalls;
 
-namespace JobAgent
+namespace JobAgent.Logic
 {
     public class JobLogic
     {
         public static Job job;
-
+        public static string workingDir = "App_Data";
         /// <summary>
         /// Start running a job
         /// </summary>
         /// <param name="Job">Job to run</param>
-        public static void StartJob(Job Job)
+        public static bool StartJob(Job Job)
         {
             //AgentAPI.UpdateJob(Job.JobName);
             job = Job;
             LogLogic.InfoLog("Job Received. Starting soon...");
             Thread DoJob = new Thread(StartJobThread);
             DoJob.Start(job.JobID);
+            return true;
         }
 
         /// <summary>
@@ -129,7 +131,14 @@ namespace JobAgent
             try
             {
                 Process process = new Process();
-                string path = Path.Combine("App_Data",name, info);
+                string path = Path.Combine(workingDir, name, info);
+                string dir = Path.Combine(workingDir, name);
+
+                if(!Directory.Exists(dir))
+                {
+                    DownloadAndUnzip(name, "");
+                }
+
                 if (info.Contains("?"))
                 {
                     process.StartInfo.FileName = info.Split('?')[0];
@@ -184,6 +193,12 @@ namespace JobAgent
         private static void SetJobStarted(Job job)
         {
             JobAPI.SetJobStarted(job);
+        }
+
+
+        private static void DownloadAndUnzip(string filename, string dest)
+        {
+            FileAPI.Download(filename, dest);
         }
     }
 }

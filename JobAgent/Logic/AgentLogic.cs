@@ -2,9 +2,8 @@
 using System.Diagnostics;
 using DataTypes;
 using WebAPIClient.APICalls;
-using JobAgent.SignalR;
 
-namespace JobAgent
+namespace JobAgent.Logic
 {
     /// <summary>
     /// Logic actions for Agent

@@ -1,4 +1,5 @@
 ﻿using DataTypes;
+using JobAgent.Logic;
 using NetFwTypeLib;
 using System;
 using System.Net;
